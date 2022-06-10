@@ -182,11 +182,11 @@ components:
           maxLength: 8
           minLength: 3
           type: string
-          description: username conatins letters only
+          description: username contains letters only
         password:
           maxLength: 10
           minLength: 5
-          description: password conatins at least one number and one special char
+          description: password contains at least one number and one special char
           format: password
       example:
         username: my_name
