@@ -11,5 +11,18 @@ async function getFavoriteRecipes(user_id){
 
 
 
+
+async function markAsWatched(user_id, recipe_id){
+    await DButils.execQuery(`INSERT INTO watched_recipes VALUES ('${user_id}','${recipe_id}')`);
+}
+
+async function getWatchedRecipes(user_id){
+    const recipes_id = await DButils.execQuery(`select recipe_id from watched_recipes where user_id='${user_id}'`);
+    return recipes_id;
+}
+
+
 exports.markAsFavorite = markAsFavorite;
 exports.getFavoriteRecipes = getFavoriteRecipes;
+exports.markAsWatched = markAsWatched;
+exports.getWatchedRecipes = getWatchedRecipes;
