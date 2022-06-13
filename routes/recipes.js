@@ -35,6 +35,16 @@ router.post("/searchRecipes", async (req, res) => {
 
 });
 
+router.post("/randomRecipes", async function (req, res) {
+  let recipes = await recipes_utils.getRandomRecipes();
+  let random_lst = [];
+  for (let i = 0; i < recipes.length; i++)
+  {
+      let recipe_info = await recipes_utils.getRecipeDetails(recipes[i], true);
+      random_lst.push(recipe_info);
+  }
+  res.status(200).send(random_lst);
+});
 
 module.exports = router;
 

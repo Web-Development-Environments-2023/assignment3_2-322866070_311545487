@@ -45,6 +45,7 @@ async function getRecipeDetails(recipe_id) {
         }
     });
     let recipe_info = await parseData(res);
+    // let recipe_info = res.data;
     return {
         id: recipe_info.id,
         image: recipe_info.image,
@@ -62,6 +63,7 @@ async function getRecipeDetails(recipe_id) {
 
 async function searchRecipes(query, cuisine, diet, intolerances, res_num)
 {
+    let recipes_id_lst = [];
     let res = await axios.get(`${api_domain}/search`,
         {
             params: {
@@ -76,7 +78,7 @@ async function searchRecipes(query, cuisine, diet, intolerances, res_num)
         }
     );
     let recipe_info = await parseData(res);
-    let recipes_id_lst = [];
+    // let recipe_info = res.data;
     for (let recipe in recipe_info.results)
     {
         recipes_id_lst.push(recipe_info.results[recipe].id);
@@ -91,9 +93,28 @@ async function parseData(raw_data)
 };
 
 
+async function getRandomRecipes()
+{
+    let recipes_id_lst = [];
+    let res = await axios.get(`${api_domain}/random`, {
+        params: {
+            number: 3,
+            apiKey: process.env.spooncular_apiKey
+        }
+    });
+    let recipe_info = await getDataFromAnswer(res);
+    // let recipe_info = res.data;
+    for (let recipe in recipe_info.recipes)
+    {
+        recipes_id_lst.push(recipe_info.recipes[recipe].id);
+    }
+    return recipes_id_lst;
+    
+};
 
 
 exports.getRecipeDetails = getRecipeDetails;
 exports.searchRecipes = searchRecipes;
+exports.getRandomRecipes = getRandomRecipes;
 
 

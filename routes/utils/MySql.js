@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const config={
 connectionLimit:4,
-  host: process.env.host,//"localhost"
+  host: process.env.host,//"localhost" // https://cookify.cs.bgu.ac.il/
   user: process.env.user,//"root"
   password: "12345678",// password: "pass_root@123", //qRBUc6VRBjVY35y4uQw9
   database:"mydb"
