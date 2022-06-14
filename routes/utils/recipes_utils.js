@@ -1,4 +1,5 @@
 const axios = require("axios");
+const DButils = require("./DButils");
 const api_domain = "https://api.spoonacular.com/recipes";
 
 
@@ -45,7 +46,6 @@ async function getRecipeDetails(recipe_id) {
         }
     });
     let recipe_info = await parseData(res);
-    // let recipe_info = res.data;
     return {
         id: recipe_info.id,
         image: recipe_info.image,
@@ -112,7 +112,22 @@ async function getRandomRecipes()
     
 };
 
+async function getFavoriteRecipesById(user_id,recipeId){
+    const recipes_id = await DButils.execQuery(`select * from mydb.favorite_recipes where user_id='${user_id}' and recipe_id='${recipeId}'`);
+    return recipes_id;
+}
 
+async function getWatchedRecipeById(user_id,recipeId){
+    const recipes_id = await DButils.execQuery(`select * from mydb.watched_recipes where username='${user_id}' and recipe_id='${recipeId}'`);
+    return recipes_id;
+}
+async function getFamilyRecipes(){
+    const recipes_id = await DButils.execQuery(`select * from mydb.family_recipes`);
+    return recipes_id;
+}
+exports.getFamilyRecipes = getFamilyRecipes;
+exports.getWatchedRecipeById = getWatchedRecipeById;
+exports.getFavoriteRecipesById = getFavoriteRecipesById;
 exports.getRecipeDetails = getRecipeDetails;
 exports.searchRecipes = searchRecipes;
 exports.getRandomRecipes = getRandomRecipes;
