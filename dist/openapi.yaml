@@ -15,7 +15,7 @@ tags:
 - name: Users
   description: All the user's personal app info
 - name: Recipes
-  description: All reciepes general info
+  description: All recipes general info
 paths:
   /register:
     post:
@@ -98,9 +98,9 @@ paths:
             schema:
               type: object
               properties:
-                reciepeId:
+                recipeId:
                   type: string
-                  description: reciepe's id which the user saved
+                  description: recipe's id which the user saved
                   example: 716429
       responses:
         "200":
@@ -109,30 +109,254 @@ paths:
           description: user is not authorized
       security:
       - cookieAuth: []
-  /recipes/{recipeId}:
+  /users/watched:
     get:
       tags:
-      - Recipes
-      summary: Return preview details on recipe by his ID
-      description: Return preview details on recipe by his ID
-      parameters:
-      - name: recipeId
-        in: path
-        description: recipe's id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
+      - Users
+      summary: Return the watched recipes that were saved by user
+      description: Get an array of recipes that were watched by a specific user
       responses:
         "200":
-          description: data about the recipe
+          description: data about the user's watched recipes returned
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RecipePreview'
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+    post:
+      tags:
+      - Users
+      summary: save recipe in the watched list of a user
+      description: save recipe in the watched list of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipe_id:
+                  type: string
+                  description: recipe's id which the user watched
+                  example: 716429
+      responses:
+        "200":
+          description: The Recipe successfully saved as watched
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+/users/watched3:
+    get:
+      tags:
+      - Users
+      summary: Return the 3 last watched recipes that were saved by user
+      description: Get an array of 3 last recipes that were watched by a specific user, if less than 3 exists return all the existing watched recipes
+      responses:
+        "200":
+          description: data about the user's 3 last watched recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+  /users/personal:
+    get:
+      tags:
+      - Users
+      summary: Return the personal recipes that were created by user
+      description: Get an array of recipes that were created by a specific user
+      responses:
+        "200":
+          description: data about the user's created recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+    post:
+      tags:
+      - Users
+      summary: create personal recipe and save in the personal list of a user
+      description: create personal recipe and save in the personal list of a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipe_id:
+                  type: string
+                  description: recipe's id which the user created
+                  example: 716429
+                picture:
+                  type: string
+                  description: recipe's picture path
+                  example: "c:/pictures/recipe.png" #will be changed to url when we won't be using local db
+                name:
+                  type: string
+                  description: recipe's name
+                  example: "Chocolate Cake"
+                time_to_prepare:
+                  type: string
+                  description: recipe's time to prepare in minutes
+                  example: "45 to 60 minutes"
+                vegan:
+                  type: boolean
+                  description: is the recipe vegan
+                  example: "1"
+                vegeterian:
+                  type: boolean
+                  description: is the recipe vegeterian
+                  example: "0"
+                ingridients:
+                  type: string
+                  description: recipe's ingridients
+                  example: "half a cup of flour, five chocolate chips"
+                instructions:
+                  type: string
+                  description: recipe's instructions
+                  example: "mix everything, put in the oven for 30 minutes"
+                number_of_servings:
+                  type: string
+                  description: recipe's number of servings
+                  example: "three small servings"
+                glutenFree:
+                  type: boolean
+                  description: is the recipe glutenFree
+                  example: "0"
+      responses:
+        "200":
+          description: The Recipe successfully saved as personal
+        "401":
+          description: user is not authorized
+      security:
+      - cookieAuth: []
+  /recipes/:recipeId: #example: /recipes/716429
+    get:
+      tags:
+      - Recipes
+      summary: Return the preview details on recipe by his ID
+      description: Get preview details on recipe by hid ID
+      responses:
+        "200":
+          description: data about the recipe returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipePreview'
+                  watched:
+                    type: boolean
+                    description: if a user is logged in, return whether the recipe was watched or not, if not logged in return false
+                    example: "1"
+                  favorite:
+                    type: boolean
+                    description: if a user is logged in, return whether the recipe was favorited or not, if not logged in return false
+                    example: "1"
         "404":
-          description: recipeId is not exists
+          description: recipeId is not found
+  /recipes/searchRecipes:
+    post: #the access to the api was only allowed when it's a post request, get request returned an error
+      tags:
+      - Recipes
+      summary: search recipes by filters
+      description: search recipes by filters
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: search query for API
+                  example: https://api.spoonacular.com/recipes/queries/analyze?q=salmon+with+fusilli+and+no+nuts
+                cuisine:
+                  type: string
+                  description: select certain cuisine's recipes
+                  example: "Italian"
+                diet:
+                  type: string
+                  description: select certain diet recipes
+                  example: "GlutenFree"
+                intolerances:
+                  type: string
+                  description: select certain intolerances recipes
+                  example: "Dairy"
+                number:
+                  type: int
+                  enum: [5,10,15]
+                  default: 5
+                  description: select amount of recipes to be returend
+                  example: "10"
+                watched:
+                  type: boolean
+                  description: if a user is logged in, return whether the recipe was watched or not, if not logged in return false
+                  example: "1"
+                favorite:
+                  type: boolean
+                  description: if a user is logged in, return whether the recipe was favorited or not, if not logged in return false
+                  example: "1"
+      responses:
+        "200":
+          description: The Recipe successfully saved as watched
+        "422":
+          description: Invalid or missing arguments
+  /recipes/randomRecipes:
+    post: #the access to the api was only allowed when it's a post request, get request returned an error
+      tags:
+      - Recipes
+      summary: get random recipes
+      description: get random recipes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                $ref: '#/components/schemas/RecipePreview'
+                watched:
+                  type: boolean
+                  description: if a user is logged in, return whether the recipe was watched or not, if not logged in return false
+                  example: "1"
+                favorite:
+                  type: boolean
+                  description: if a user is logged in, return whether the recipe was favorited or not, if not logged in return false
+                  example: "1"
+      responses:
+        "200":
+          description: The Recipe successfully saved as watched
+  /recipes/family:
+    get:
+      tags:
+      - Recipes
+      summary: Return the family recipes
+      description: Get an array of the family recipes
+      responses:
+        "200":
+          description: data about the family recipes returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/family_recipes'
 components:
   schemas:
     User:
@@ -227,4 +451,104 @@ components:
           type: boolean
           description: indication if the recipe is gluten free
           example: false
-  
+    family_recipes:
+      type: object
+      properties:
+        recipe_id:
+          type: string
+          description: recipe identifier
+          example: chocolate_cake_1
+        recipe_owner:
+          type: string
+          description: recipe owner
+          example: Shahar
+        occasion:
+          type: string
+          description: occasions to make the recipe
+          example: family dinner
+        ingridients:
+          type: string
+          description: recipe's ingridients
+          example: 3 eggs, half a cup of flour
+        instructions:
+          type: string
+          description: how to make the recipe
+          example: mix everything together and put in the oven for 30 minutes
+        picture:
+          type: string
+          description: recipe's picture path
+          example: "c:/pictures/recipe.png" #will be changed to url when we won't be using local db
+    favorite_recipes:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: identifier of the user who favorited the recipe
+          example: Shahar
+        recipe_id:
+          type: string
+          description: recipe identifier
+          example: 123456
+    watched_recipes:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: identifier of the user who watched the recipe
+          example: Shahar
+        recipe_id:
+          type: string
+          description: recipe identifier
+          example: 123456
+        date:
+          type: datetime
+          description: when was the recipe last watched
+          example: 2022-12-28 23:59:59
+    personal_recipes:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: identifier of the user who created the recipe
+          example: Shahar
+        recipe_id:
+          type: string
+          description: recipe identifier
+          example: shahar's_recipe_1
+        picture:
+          type: string
+          description: recipe's picture path
+          example: "c:/pictures/recipe.png" #will be changed to url when we won't be using local db
+        name:
+          type: string
+          description: recipe's title/name
+          example: Chocolate Cake #will be changed to url when we won't be using local db
+        time_to_prepare:
+          type: string
+          description: recipe's time to prepare in minutes
+          example: "45 to 60 minutes"
+        vegan:
+          type: boolean
+          description: is the recipe vegan
+          example: "1"
+        vegeterian:
+          type: boolean
+          description: is the recipe vegeterian
+          "example": "0"
+        ingridients:
+          type: string
+          description: recipe's ingridients
+          example: "half a cup of flour, five chocolate chips"
+        instructions:
+          type: string
+          description: recipe's ingridients
+          example: "mix everything"
+        number_of_servings:
+          type: string
+          description: recipe's number of servings
+          example: "three small servings"
+        glutenFree:
+          type: boolean
+          description: is the recipe glutenFree
+          example: "0"
+        
