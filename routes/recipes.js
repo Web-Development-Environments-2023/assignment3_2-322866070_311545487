@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const recipes_utils = require("./utils/recipes_utils");
 
-router.get("/", (req, res) => res.send("im here"));
+// router.get("/", (req, res) => res.send("im here"));
 
 /**
  * This path returns a full details of a recipe by its id
@@ -32,7 +32,9 @@ router.post("/searchRecipes", async (req, res) => {
     const cuisine = req.body.cuisine;
     const diet = req.body.diet;
     const intolerances = req.body.intolerances;
-    const number = req.body.number;
+    // let numInt = parseInt(req.body.number);
+    // console.log("")
+    const number = req.body.amount;
     // res.send("im awesome");
     let recipes = await recipes_utils.searchRecipes(query, cuisine, diet, intolerances, number); 
     let search_res = [];
@@ -69,11 +71,11 @@ router.post("/randomRecipes", async function (req, res) {
         const user_id = req.session.user_id;
         let watched_list = await recipes_utils.getWatchedRecipeById(user_id,recipes[i]);
         if(watched_list.length>0){watched=true;}
-        let favorite_list = await recipes_utils.getFavoriteRecipesById(user_id,recipes[i]);
-        if(favorite_list.length>0){favorite=true;}
+        // let favorite_list = await recipes_utils.getFavoriteRecipesById(user_id,recipes[i]);
+        // if(favorite_list.length>0){favorite=true;}
       }
       recipe_info['watched']=watched;//not sure if 'watched' or watched in key
-      recipe_info['favorite']=favorite;//not sure if 'favorite' or favorite in key
+      // recipe_info['favorite']=favorite;//not sure if 'favorite' or favorite in key
       random_lst.push(recipe_info);
   }
   res.status(200).send(random_lst);

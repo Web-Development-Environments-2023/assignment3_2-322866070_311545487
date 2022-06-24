@@ -150,7 +150,7 @@ paths:
           description: user is not authorized
       security:
       - cookieAuth: []
-/users/watched3:
+  /users/watched3:
     get:
       tags:
       - Users
@@ -246,12 +246,21 @@ paths:
           description: user is not authorized
       security:
       - cookieAuth: []
-  /recipes/:recipeId: #example: /recipes/716429
+  /recipes/{recipeId}: #example: /recipes/716429
     get:
       tags:
       - Recipes
       summary: Return the preview details on recipe by his ID
       description: Get preview details on recipe by hid ID
+      parameters:
+      - name: recipeId
+        in: path
+        description: recipe ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
       responses:
         "200":
           description: data about the recipe returned
@@ -277,6 +286,62 @@ paths:
       - Recipes
       summary: search recipes by filters
       description: search recipes by filters
+      # parameters:
+      # - name: query
+      #   description: search query for API
+      #   required: false
+      #   style: simple
+      #   explode: false
+      #   example: "pasta"
+      #   schema:
+      #     type: string
+          
+      # - name: cuisine
+      #   description: Select certain cuisine's recipes
+      #   required: false
+      #   style: simple
+      #   explode: false
+      #   example: "Italian"
+      #   schema:
+      #     type: string
+          
+      # - name: diet
+      #   description: Select certain diet recipes
+      #   required: false
+      #   style: simple
+      #   explode: false
+      #   example: "vegetarian"  
+      #   schema:
+      #     type: string
+                
+      # - name: intolerances
+      #   description: Select certain intolerances recipes
+      #   required: false
+      #   style: simple
+      #   explode: false
+      #   example: "Peanut"  
+      #   schema:
+      #     type: string
+               
+      # - name: number
+      #   enum: [5,10,15]
+      #   description: Select amount of recipes to be returend
+      #   required: true
+      #   default: 5
+      #   style: simple
+      #   explode: false
+      #   example: 10   
+      #   schema:
+      #     type: integer
+             
+      # - name: watched
+      #   type: boolean
+      #   description: if a user is logged in, return whether the recipe was watched or not, if not logged in return false
+      #   example: "1"
+      # - name: favorite
+      #   type: boolean
+      #   description: if a user is logged in, return whether the recipe was favorited or not, if not logged in return false
+      #   example: "1"
       requestBody:
         content:
           application/json:
@@ -286,7 +351,7 @@ paths:
                 query:
                   type: string
                   description: search query for API
-                  example: https://api.spoonacular.com/recipes/queries/analyze?q=salmon+with+fusilli+and+no+nuts
+                  example: pasta
                 cuisine:
                   type: string
                   description: select certain cuisine's recipes
@@ -294,25 +359,25 @@ paths:
                 diet:
                   type: string
                   description: select certain diet recipes
-                  example: "GlutenFree"
+                  example: "vegetarian"
                 intolerances:
                   type: string
                   description: select certain intolerances recipes
-                  example: "Dairy"
+                  example: "Peanut"
                 number:
-                  type: int
+                  type: integer
                   enum: [5,10,15]
                   default: 5
-                  description: select amount of recipes to be returend
+                  description: select amount of recipes to be returned
                   example: "10"
                 watched:
                   type: boolean
                   description: if a user is logged in, return whether the recipe was watched or not, if not logged in return false
-                  example: "1"
+                  example: "0"
                 favorite:
                   type: boolean
-                  description: if a user is logged in, return whether the recipe was favorited or not, if not logged in return false
-                  example: "1"
+                  description: if a user is logged in, return whether the recipe was favored or not, if not logged in return false
+                  example: "0"
       responses:
         "200":
           description: The Recipe successfully saved as watched

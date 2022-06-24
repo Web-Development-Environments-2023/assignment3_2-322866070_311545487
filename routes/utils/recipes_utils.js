@@ -42,6 +42,7 @@ const api_domain = "https://api.spoonacular.com/recipes";
 async function getRecipeDetails(recipe_id) {
     let res = await axios.get(`${api_domain}/${recipe_id}/information`, {
         params: {
+            includeNutrition: false,
             apiKey: process.env.spooncular_apiKey
         }
     });
@@ -51,12 +52,13 @@ async function getRecipeDetails(recipe_id) {
         image: recipe_info.image,
         title: recipe_info.title,
         readyInMinutes: recipe_info.readyInMinutes,
-        popularity: recipe_info.aggregateLikes,
+        aggregateLikes: recipe_info.aggregateLikes,
         vegan: recipe_info.vegan,
         vegetarian: recipe_info.vegetarian,
         glutenFree: recipe_info.glutenFree,
         servings: recipe_info.servings,
-        // ingredients: recipe_info.extendedIngredients,
+        ingredients: recipe_info.extendedIngredients,
+        analyzedInstructions: recipe_info.analyzedInstructions,
         instructions: recipe_info.instructions
     }
 }
@@ -102,7 +104,7 @@ async function getRandomRecipes()
             apiKey: process.env.spooncular_apiKey
         }
     });
-    let recipe_info = await getDataFromAnswer(res);
+    let recipe_info = await parseData(res);
     // let recipe_info = res.data;
     for (let recipe in recipe_info.recipes)
     {
