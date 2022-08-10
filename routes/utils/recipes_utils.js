@@ -53,7 +53,7 @@ async function getRecipeDetails(recipe_id) {
         title: recipe_info.title,
         readyInMinutes: recipe_info.readyInMinutes,
         aggregateLikes: recipe_info.aggregateLikes,
-        vegan: recipe_info.vegan,
+        title: recipe_info.title,
         vegetarian: recipe_info.vegetarian,
         glutenFree: recipe_info.glutenFree,
         servings: recipe_info.servings,
