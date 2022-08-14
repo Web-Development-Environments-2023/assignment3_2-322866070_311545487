@@ -69,12 +69,12 @@ async function getWatchedRecipes(user_id){
     return recipes_id;
 }
 
-async function addPersonalRecipe(user_id,recipe_id,picture,name,time_to_prepare,vegan,vegeterian,ingridients,instructions,number_of_servings,glutenFree){
-    if(user_id==undefined || recipe_id==undefined || picture==undefined || name==undefined || time_to_prepare==undefined || vegan==undefined || vegeterian==undefined || ingridients==undefined || instructions==undefined || number_of_servings==undefined || glutenFree==undefined ){
+async function addPersonalRecipe(user_id,recipe_id,picture,name,time_to_prepare,title,vegeterian,ingridients,instructions,number_of_servings,glutenFree){
+    if(user_id==undefined || recipe_id==undefined || picture==undefined || name==undefined || time_to_prepare==undefined || title==undefined || vegeterian==undefined || ingridients==undefined || instructions==undefined || number_of_servings==undefined || glutenFree==undefined ){
         throw { status: 422, message: "Missing Values" }; 
     }
     else{
-        await DButils.execQuery(`insert into mydb.personal_recipes values ('${user_id}','${recipe_id}','${picture}','${name}','${time_to_prepare}','${vegan}','${vegeterian}','${ingridients}','${instructions}','${number_of_servings}','${glutenFree}')`);
+        await DButils.execQuery(`insert into mydb.personal_recipes values ('${user_id}','${recipe_id}','${picture}','${name}','${time_to_prepare}','${title}','${vegeterian}','${ingridients}','${instructions}','${number_of_servings}','${glutenFree}')`);
     }
 }
 

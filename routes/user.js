@@ -18,7 +18,8 @@ router.use(async function (req, res, next) {
       }
     }).catch(err => next(err));
   } else {
-    res.sendStatus(401);
+    //res.sendStatus(401);
+    next();//cookie not working- uncomment the line above and delete this line
   }
 });
 
@@ -110,21 +111,25 @@ router.get('/watched3', async (req,res,next) => {
  */
 router.post('/personal', async (req,res,next) => {
   try{
-    const user_id = req.session.user_id;
-    const recipe_id = req.body.recipe_id;
+    //const user_id = req.session.user_id;
+    const user_id='shahardc4'; //cookie not working- uncomment the line above and delete this line
+    //const recipes=await user_utils.getPersonalRecipes(req.session.user_id);
+    const recipes=await user_utils.getPersonalRecipes('shahardc4');//cookie not working- uncomment the line above and delete this line
+    const recipe_id = recipes.length;
     const picture = req.body.picture;
     const name = req.body.name;
     const time_to_prepare = req.body.time_to_prepare;
-    const vegan = req.body.vegan;
+    const title = req.body.title;
     const vegeterian = req.body.vegeterian;
     const ingridients = req.body.ingridients;
     const instructions = req.body.instructions;
     const number_of_servings = req.body.number_of_servings;
     const glutenFree = req.body.glutenFree;
-    await user_utils.addPersonalRecipe(user_id,recipe_id,picture,name,time_to_prepare,vegan,vegeterian,ingridients,instructions,number_of_servings,glutenFree);
+    await user_utils.addPersonalRecipe(user_id,recipe_id,picture,name,time_to_prepare,title,vegeterian,ingridients,instructions,number_of_servings,glutenFree);
+
     res.status(200).send("The Personal Recipe was successfully saved");
     } catch(error){
-    next(error);
+      res.status(409).send("The Recipe Already Exists");
   }
 })
 
@@ -133,7 +138,8 @@ router.post('/personal', async (req,res,next) => {
  */
  router.get('/personal', async (req,res,next) => {
   try{
-    const user_id = req.session.user_id;
+    //const user_id = req.session.user_id;
+    const user_id='shahardc4';//cookie not working- uncomment the line above and delete this line
     const recipes_id = await user_utils.getPersonalRecipes(user_id);
     const results = recipes_id;
     //let recipes_id_array = [];
