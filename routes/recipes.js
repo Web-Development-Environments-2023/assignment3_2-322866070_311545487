@@ -60,6 +60,7 @@ router.post("/searchRecipes", async (req, res) => {
 });
 
 router.post("/randomRecipes", async function (req, res) {
+  console.log("in randomRecipes");
   let recipes = await recipes_utils.getRandomRecipes();
   let random_lst = [];
   for (let i = 0; i < recipes.length; i++)
@@ -70,7 +71,9 @@ router.post("/randomRecipes", async function (req, res) {
       if (req.session && req.session.user_id) {
         const user_id = req.session.user_id;
         let watched_list = await recipes_utils.getWatchedRecipeById(user_id,recipes[i]);
-        if(watched_list.length>0){watched=true;}
+        if(watched_list.length>0){
+          watched=true;
+        }
         // let favorite_list = await recipes_utils.getFavoriteRecipesById(user_id,recipes[i]);
         // if(favorite_list.length>0){favorite=true;}
       }

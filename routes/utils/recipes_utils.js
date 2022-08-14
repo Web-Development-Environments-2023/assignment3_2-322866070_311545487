@@ -39,6 +39,37 @@ const api_domain = "https://api.spoonacular.com/recipes";
 //     }
 // }
 
+async function getListRecipes(recipe_lst){
+    results = [];
+    for (let recipe in recipe_lst.recipe_id)
+    {
+        // console.log(recipe);
+        let res = await axios.get(`${api_domain}/${recipe}/information`, {
+            params: {
+                includeNutrition: false,
+                apiKey: process.env.spooncular_apiKey
+            }
+        });
+        let recipe_info = await parseData(res);
+        
+        results.push({
+            id: recipe_info.id,
+            image: recipe_info.image,
+            title: recipe_info.title,
+            readyInMinutes: recipe_info.readyInMinutes,
+            aggregateLikes: recipe_info.aggregateLikes,
+            title: recipe_info.title,
+            vegetarian: recipe_info.vegetarian,
+            glutenFree: recipe_info.glutenFree,
+            servings: recipe_info.servings,
+            ingredients: recipe_info.extendedIngredients,
+            analyzedInstructions: recipe_info.analyzedInstructions,
+            instructions: recipe_info.instructions
+        });
+    }
+    return results;
+} 
+
 async function getRecipeDetails(recipe_id) {
     let res = await axios.get(`${api_domain}/${recipe_id}/information`, {
         params: {
@@ -133,5 +164,5 @@ exports.getFavoriteRecipesById = getFavoriteRecipesById;
 exports.getRecipeDetails = getRecipeDetails;
 exports.searchRecipes = searchRecipes;
 exports.getRandomRecipes = getRandomRecipes;
-
+exports.getListRecipes = getListRecipes;
 
