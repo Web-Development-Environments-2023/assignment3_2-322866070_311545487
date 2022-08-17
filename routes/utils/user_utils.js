@@ -44,7 +44,6 @@ async function markAsWatched(user_id, recipe_id){
     else{
         const recipes_id = await DButils.execQuery(`select recipe_id from mydb.watched_recipes where username='${user_id}' AND recipe_id='${recipe_id}'`);
         if(recipes_id.length>0){
-            console.log()
             await DButils.execQuery(`UPDATE mydb.watched_recipes SET date = '${datetime}' WHERE username = '${user_id}' AND recipe_id='${recipe_id}';`);
         }
         else{
