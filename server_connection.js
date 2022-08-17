@@ -15,6 +15,7 @@ var port = normalizePort(process.env.PORT || '443');
 
 app.set('port', port);
 
+
 /**
  * Create HTTP server.
  */
@@ -74,7 +75,7 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-server.address("https://hallel-pro.cs.bgu.ac.il");
+server.address("https://cookify.cs.bgu.ac.il");
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
