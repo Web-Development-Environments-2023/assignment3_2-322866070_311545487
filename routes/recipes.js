@@ -60,7 +60,6 @@ router.post("/searchRecipes", async (req, res) => {
 });
 
 router.post("/randomRecipes", async function (req, res) {
-  console.log("in randomRecipes");
   let recipes = await recipes_utils.getRandomRecipes();
   let random_lst = [];
   for (let i = 0; i < recipes.length; i++)
