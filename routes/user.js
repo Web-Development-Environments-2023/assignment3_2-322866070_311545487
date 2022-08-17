@@ -18,8 +18,8 @@ router.use(async function (req, res, next) {
       }
     }).catch(err => next(err));
   } else {
-    //res.sendStatus(401);
-    next();//cookie not working- uncomment the line above and delete this line
+    res.sendStatus(401);//local:if cookie not working comment this
+    //next();//cookie not working- uncomment the line above and delete this line//remote:comment this
   }
 });
 
@@ -118,10 +118,10 @@ router.get('/watched3', async (req,res,next) => {
  */
 router.post('/personal', async (req,res,next) => {
   try{
-    //const user_id = req.session.user_id;
-    const user_id='shahardc4'; //cookie not working- uncomment the line above and delete this line
-    //const recipes=await user_utils.getPersonalRecipes(req.session.user_id);
-    const recipes=await user_utils.getPersonalRecipes('shahardc4');//cookie not working- uncomment the line above and delete this line
+    const user_id = req.session.user_id;//local: if cookie not working comment this
+    //const user_id='shahardc4'; //remote: comment this
+    const recipes=await user_utils.getPersonalRecipes(req.session.user_id);//local: if cookie not working comment this
+    //const recipes=await user_utils.getPersonalRecipes('shahardc4');//cookie not working- uncomment the line above and delete this line //remote: comment this
     const recipe_id = recipes.length;
     const picture = req.body.picture;
     const name = req.body.name;
@@ -145,8 +145,8 @@ router.post('/personal', async (req,res,next) => {
  */
  router.get('/personal', async (req,res,next) => {
   try{
-    //const user_id = req.session.user_id;
-    const user_id='shahardc4';//cookie not working- uncomment the line above and delete this line
+    const user_id = req.session.user_id;//local: if cookie not working comment this
+    //const user_id='shahardc4';//remote: comment this
     const recipes_id = await user_utils.getPersonalRecipes(user_id);
     const results = recipes_id;
     //let recipes_id_array = [];
